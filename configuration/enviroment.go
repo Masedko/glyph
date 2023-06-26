@@ -22,6 +22,14 @@ func LoadConfig(filePath string) (err error) {
 
 	viper.AutomaticEnv()
 
+	viper.BindEnv("DB_HOST")
+	viper.BindEnv("DB_USER")
+	viper.BindEnv("DB_PASSWORD")
+	viper.BindEnv("DB_NAME")
+	viper.BindEnv("DB_PORT")
+	viper.BindEnv("SSL_MODE")
+	viper.BindEnv("STRATZ_TOKEN")
+
 	if viper.ReadInConfig() != nil {
 		return
 	}
