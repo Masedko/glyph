@@ -4,6 +4,7 @@ import (
 	"compress/bzip2"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"tiktok-arena/internal/core/dtos"
@@ -24,6 +25,13 @@ func (s ValveService) RetrieveFile(match dtos.Match) error {
 		return err
 	}
 	defer response.Body.Close()
+	path := "internal/data/demos"
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		err := os.Mkdir(path, os.ModePerm)
+		if err != nil {
+			log.Println(err)
+		}
+	}
 	// Create a new file to save the decompressed content
 	filename := fmt.Sprintf("internal/data/demos/%d.dem", match.ID)
 	file, err := os.Create(filename)
