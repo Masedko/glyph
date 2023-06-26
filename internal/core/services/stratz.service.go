@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 	"github.com/machinebox/graphql"
-	"tiktok-arena/internal/core/dtos"
+	"go-glyph-v2/internal/core/dtos"
 )
 
 type StratzService struct {

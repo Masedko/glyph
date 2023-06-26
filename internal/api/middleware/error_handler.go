@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"tiktok-arena/internal/core/services"
+	"go-glyph-v2/internal/core/services"
 )
 
 func ErrorHandler(c *fiber.Ctx, err error) error {

@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"github.com/dotabuff/manta"
 	"github.com/dotabuff/manta/dota"
+	"go-glyph-v2/internal/core/dtos"
+	"go-glyph-v2/internal/core/models"
 	"golang.org/x/exp/slices"
 	"math"
 	"os"
 	"strconv"
-	"tiktok-arena/internal/core/dtos"
-	"tiktok-arena/internal/core/models"
 )
 
 type MantaService struct {

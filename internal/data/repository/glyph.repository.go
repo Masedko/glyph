@@ -1,8 +1,8 @@
 package repository
 
 import (
+	"go-glyph-v2/internal/core/models"
 	"gorm.io/gorm"
-	"tiktok-arena/internal/core/models"
 )
 
 type GlyphRepository struct {

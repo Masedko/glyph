@@ -3,7 +3,7 @@ package routers
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
-	_ "tiktok-arena/docs"
+	_ "go-glyph-v2/docs"
 )
 
 func SetupRoutes(app *fiber.App,

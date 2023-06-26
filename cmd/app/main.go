@@ -1,9 +1,9 @@
 package main
 
 import (
+	"go-glyph-v2/configuration"
+	"go-glyph-v2/internal/api/app"
 	"log"
-	"tiktok-arena/configuration"
-	"tiktok-arena/internal/api/app"
 )
 
 func main() {

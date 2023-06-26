@@ -3,11 +3,11 @@ package services
 import (
 	"compress/bzip2"
 	"fmt"
+	"go-glyph-v2/internal/core/dtos"
 	"io"
 	"log"
 	"net/http"
 	"os"
-	"tiktok-arena/internal/core/dtos"
 )
 
 type ValveService struct {

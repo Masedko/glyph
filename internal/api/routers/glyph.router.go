@@ -2,7 +2,7 @@ package routers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"tiktok-arena/internal/api/controllers"
+	"go-glyph-v2/internal/api/controllers"
 )
 
 func NewGlyphRouter(c *controllers.GlyphController) func(router fiber.Router) {

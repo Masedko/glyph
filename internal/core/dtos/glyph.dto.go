@@ -1,6 +1,6 @@
 package dtos
 
-import "tiktok-arena/internal/core/models"
+import "go-glyph-v2/internal/core/models"
 
 type Match struct {
 	ID         int `validate:"required"`

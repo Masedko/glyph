@@ -1,9 +1,9 @@
 package services
 
 import (
-	"tiktok-arena/internal/core/dtos"
-	"tiktok-arena/internal/core/models"
-	"tiktok-arena/internal/core/validator"
+	"go-glyph-v2/internal/core/dtos"
+	"go-glyph-v2/internal/core/models"
+	"go-glyph-v2/internal/core/validator"
 )
 
 type GlyphServiceGlyphRepository interface {

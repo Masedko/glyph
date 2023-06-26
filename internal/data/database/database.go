@@ -2,11 +2,11 @@ package database
 
 import (
 	"fmt"
+	"go-glyph-v2/configuration"
+	"go-glyph-v2/internal/core/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
-	"tiktok-arena/configuration"
-	"tiktok-arena/internal/core/models"
 )
 
 func ConnectDB(config *configuration.EnvConfigModel) *gorm.DB {

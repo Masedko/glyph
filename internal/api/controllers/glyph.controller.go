@@ -3,9 +3,9 @@ package controllers
 import (
 	"errors"
 	"github.com/gofiber/fiber/v2"
+	"go-glyph-v2/internal/core/dtos"
+	"go-glyph-v2/internal/core/models"
 	"strconv"
-	"tiktok-arena/internal/core/dtos"
-	"tiktok-arena/internal/core/models"
 )
 
 type GlyphService interface {

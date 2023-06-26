@@ -4,22 +4,22 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"go-glyph-v2/configuration"
+	"go-glyph-v2/internal/api/controllers"
+	"go-glyph-v2/internal/api/middleware"
+	"go-glyph-v2/internal/api/routers"
+	"go-glyph-v2/internal/core/services"
+	"go-glyph-v2/internal/data/database"
+	"go-glyph-v2/internal/data/repository"
 	"log"
 	"os"
-	"tiktok-arena/configuration"
-	"tiktok-arena/internal/api/controllers"
-	"tiktok-arena/internal/api/middleware"
-	"tiktok-arena/internal/api/routers"
-	"tiktok-arena/internal/core/services"
-	"tiktok-arena/internal/data/database"
-	"tiktok-arena/internal/data/repository"
 )
 
-//	@title			Glyph Dota 2 REST API
-//	@version		1.0
-//	@description	API for Glyph Dota 2 application
-//	@host			localhost:8000
-//	@BasePath		/api
+// @title			Glyph Dota 2 REST API
+// @version		1.0
+// @description	API for Glyph Dota 2 application
+// @host			localhost:8000
+// @BasePath		/api
 func Run(c *configuration.EnvConfigModel) {
 
 	db := database.ConnectDB(c)
