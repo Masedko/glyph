@@ -1,0 +1,56 @@
+definitions:
+  dtos.MessageResponseType:
+    properties:
+      message:
+        type: string
+    type: object
+  models.Glyph:
+    properties:
+      heroID:
+        description: ID of hero (https://liquipedia.net/dota2/MediaWiki:Dota2webapi-heroes.json)
+        type: integer
+      matchID:
+        type: integer
+      minute:
+        type: integer
+      second:
+        type: integer
+      team:
+        description: Radiant team is 2 and dire team is 3
+        type: integer
+      userSteamID:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/glyph/{matchID}:
+    post:
+      consumes:
+      - application/json
+      description: Get glyphs using match id
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Glyphs
+          schema:
+            items:
+              $ref: '#/definitions/models.Glyph'
+            type: array
+        "400":
+          description: Glyphs parse error
+          schema:
+            $ref: '#/definitions/dtos.MessageResponseType'
+      summary: Get glyphs
+      tags:
+      - glyph
+swagger: "2.0"
