@@ -2,6 +2,7 @@ package configuration
 
 import (
 	"github.com/spf13/viper"
+	"os"
 )
 
 type EnvConfigModel struct {
@@ -20,15 +21,13 @@ func LoadConfig(filePath string) (err error) {
 	viper.SetConfigType("env")
 	viper.SetConfigFile(filePath)
 
-	viper.AutomaticEnv()
-
-	viper.BindEnv("DB_HOST")
-	viper.BindEnv("DB_USER")
-	viper.BindEnv("DB_PASSWORD")
-	viper.BindEnv("DB_NAME")
-	viper.BindEnv("DB_PORT")
-	viper.BindEnv("SSL_MODE")
-	viper.BindEnv("STRATZ_TOKEN")
+	EnvConfig.DBHost = os.Getenv("POSTGRES_HOST")
+	EnvConfig.DBUserName = os.Getenv("POSTGRES_USER")
+	EnvConfig.DBUserPassword = os.Getenv("POSTGRES_PASSWORD")
+	EnvConfig.DBName = os.Getenv("POSTGRES_DB")
+	EnvConfig.DBPort = os.Getenv("POSTGRES_PORT")
+	EnvConfig.SSLMode = os.Getenv("SSL_MODE")
+	EnvConfig.STRATZToken = os.Getenv("STRATZ_TOKEN")
 
 	if viper.ReadInConfig() != nil {
 		return
