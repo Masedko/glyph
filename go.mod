@@ -1,4 +1,4 @@
-module tiktok-arena
+module go-glyph-v2
 
 go 1.18
 
