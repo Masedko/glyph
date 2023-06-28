@@ -21,27 +21,40 @@ func NewMantaService() *MantaService {
 
 func (s MantaService) GetGlyphsFromDem(match dtos.Match) ([]models.Glyph, error) {
 	filename := fmt.Sprintf("internal/data/demos/%d.dem", match.ID)
+	// Open file to parse
 	f, err := os.Open(filename)
 	if err != nil {
-		return nil, err
+		return nil, OpenFileError{filename: filename, error: err}
 	}
-	defer os.Remove(filename)
-	defer f.Close()
+	// Handle defer errors
+	defer func(name string) {
+		if tempErr := os.Remove(name); tempErr != nil {
+			err = RemoveFileError{filename: filename, error: tempErr}
+		}
+	}(filename)
+	defer func(f *os.File) {
+		if tempErr := f.Close(); tempErr != nil {
+			err = CloseFileError{filename: filename, error: tempErr}
+		}
+	}(f)
+	// Create stream parser
 	p, err := manta.NewStreamParser(f)
 	defer p.Stop()
 	if err != nil {
-		return nil, err
+		return nil, ParserCreationError{err}
 	}
+	// Declare some variables for parsing
 	var gameCurrentTime, gameStartTime float64
+	// Three variables to get current time
 	var gamePaused bool
 	var pauseStartTick int32
 	var totalPausedTicks int32
+
 	var glyphs []models.Glyph
 	var glyph models.Glyph
-	var heroplayers []dtos.HeroPlayer
-	for i := 0; i < 10; i++ {
-		heroplayers = append(heroplayers, dtos.HeroPlayer{})
-	}
+	heroPlayers := make([]dtos.HeroPlayer, 10)
+
+	magicTime := 1100.0 // Time when heroes loaded TODO
 
 	p.Callbacks.OnCDOTAUserMsg_SpectatorPlayerUnitOrders(func(m *dota.CDOTAUserMsg_SpectatorPlayerUnitOrders) error {
 		if m.GetOrderType() == int32(dota.DotaunitorderT_DOTA_UNIT_ORDER_GLYPH) {
@@ -76,10 +89,10 @@ func (s MantaService) GetGlyphsFromDem(match dtos.Match) ([]models.Glyph, error)
 			}
 			return nil
 		}
-		if gameCurrentTime < 1100 && e.GetClassName() == "CDOTA_PlayerResource" {
+		if gameCurrentTime < magicTime && e.GetClassName() == "CDOTA_PlayerResource" {
 			for i := 0; i < 10; i++ {
-				heroplayers[i].HeroID, _ = e.GetInt32("m_vecPlayerTeamData.000" + strconv.Itoa(i) + ".m_nSelectedHeroID")
-				heroplayers[i].PlayerID, _ = e.GetUint64("m_vecPlayerData.000" + strconv.Itoa(i) + ".m_iPlayerSteamID")
+				heroPlayers[i].HeroID, _ = e.GetInt32("m_vecPlayerTeamData.000" + strconv.Itoa(i) + ".m_nSelectedHeroID")
+				heroPlayers[i].PlayerID, _ = e.GetUint64("m_vecPlayerData.000" + strconv.Itoa(i) + ".m_iPlayerSteamID")
 			}
 			return nil
 		}
@@ -88,17 +101,17 @@ func (s MantaService) GetGlyphsFromDem(match dtos.Match) ([]models.Glyph, error)
 
 	err = p.Start()
 	if err != nil {
-		return nil, err
+		return nil, ParserError{err}
 	}
 	for k := range glyphs {
-		for l := range heroplayers {
-			if fmt.Sprint(glyphs[k].UserSteamID) == fmt.Sprint(heroplayers[l].PlayerID) {
-				glyphs[k].HeroID = heroplayers[l].HeroID
+		for l := range heroPlayers {
+			if fmt.Sprint(glyphs[k].UserSteamID) == fmt.Sprint(heroPlayers[l].PlayerID) {
+				glyphs[k].HeroID = heroPlayers[l].HeroID
 			}
 		}
 	}
 	if len(glyphs) == 0 {
 		return glyphs, NoGlyphsError{}
 	}
-	return glyphs, nil
+	return glyphs, err
 }

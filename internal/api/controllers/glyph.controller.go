@@ -49,7 +49,8 @@ func NewGlyphController(glyphService GlyphService, stratzService StratzService, 
 //	@Accept			json
 //	@Produce		json
 //	@Param			matchID					path		string						true	"Match ID"
-//	@Success		200						{object}	[]models.Glyph				"Glyphs"
+//	@Success		200						{object}	[]models.Glyph				"Glyphs from database"
+//	@Success		201						{object}	[]models.Glyph				"Glyphs parsed and save to database"
 //	@Failure		400						{object}	dtos.MessageResponseType	"Glyphs parse error"
 //	@Router			/api/glyph/{matchID}	[post]
 func (cr *GlyphController) GetGlyphs(c *fiber.Ctx) error {
@@ -66,7 +67,7 @@ func (cr *GlyphController) GetGlyphs(c *fiber.Ctx) error {
 	}
 	// If match is parsed -> return parsed match
 	if glyphParse.GlyphParsed == true {
-		return c.Status(fiber.StatusCreated).JSON(glyphParse.Glyphs)
+		return c.Status(fiber.StatusOK).JSON(glyphParse.Glyphs)
 	}
 	// If not in db
 	// Make request to STRATZ API
