@@ -23,7 +23,7 @@ func ErrorHandler(c *fiber.Ctx, err error) error {
 		code = fiber.StatusBadRequest
 		message = e.Error()
 	case services.FileAlreadyExistsError:
-		code = fiber.StatusBadRequest
+		code = fiber.StatusAccepted
 		message = e.Error()
 	case services.FileCreationError:
 		code = fiber.StatusInternalServerError
