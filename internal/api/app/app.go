@@ -42,8 +42,8 @@ func Run(c *configuration.EnvConfigModel) {
 
 	//	CORS middleware
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "*",
-		AllowHeaders: "*",
+		AllowOrigins: "s3rbug.github.com",
+		AllowHeaders: "POST",
 	}))
 
 	routers.SetupRoutes(app, glyphRouter)
