@@ -42,7 +42,7 @@ func Run(c *configuration.EnvConfigModel) {
 
 	//	CORS middleware
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "s3rbug.github.com",
+		AllowOrigins: "s3rbug.github.io",
 		AllowHeaders: "POST",
 	}))
 
