@@ -1,8 +1,13 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "API for Glyph Dota 2 application",
+        "title": "Glyph Dota 2 REST API",
+        "contact": {},
+        "version": "1.0"
     },
+    "host": "go-glyph-v2-f53b68856ba5.herokuapp.com",
+    "basePath": "/api",
     "paths": {
         "/api/glyph/{matchID}": {
             "post": {
@@ -28,7 +33,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Glyphs",
+                        "description": "Glyphs from database",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Glyph"
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Glyphs parsed and save to database",
                         "schema": {
                             "type": "array",
                             "items": {

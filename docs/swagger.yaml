@@ -1,3 +1,4 @@
+basePath: /api
 definitions:
   dtos.MessageResponseType:
     properties:
@@ -23,8 +24,12 @@ definitions:
       username:
         type: string
     type: object
+host: go-glyph-v2-f53b68856ba5.herokuapp.com
 info:
   contact: {}
+  description: API for Glyph Dota 2 application
+  title: Glyph Dota 2 REST API
+  version: "1.0"
 paths:
   /api/glyph/{matchID}:
     post:
@@ -41,7 +46,13 @@ paths:
       - application/json
       responses:
         "200":
-          description: Glyphs
+          description: Glyphs from database
+          schema:
+            items:
+              $ref: '#/definitions/models.Glyph'
+            type: array
+        "201":
+          description: Glyphs parsed and save to database
           schema:
             items:
               $ref: '#/definitions/models.Glyph'

@@ -39,7 +39,16 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Glyphs",
+                        "description": "Glyphs from database",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Glyph"
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Glyphs parsed and save to database",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -99,12 +108,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
+	Version:          "1.0",
+	Host:             "go-glyph-v2-f53b68856ba5.herokuapp.com",
+	BasePath:         "/api",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "Glyph Dota 2 REST API",
+	Description:      "API for Glyph Dota 2 application",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

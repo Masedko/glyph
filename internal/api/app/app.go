@@ -18,7 +18,7 @@ import (
 // @title			Glyph Dota 2 REST API
 // @version		1.0
 // @description	API for Glyph Dota 2 application
-// @host			localhost:8000
+// @host			go-glyph-v2-f53b68856ba5.herokuapp.com
 // @BasePath		/api
 func Run(c *configuration.EnvConfigModel) {
 
