@@ -27,11 +27,12 @@ func Run(c *configuration.EnvConfigModel) {
 	glyphRepository := repository.NewGlyphRepository(db)
 
 	glyphService := services.NewGlyphService(glyphRepository)
-	stratzService := services.NewStratzService(c.STRATZToken)
+	// stratzService := services.NewStratzService(c.STRATZToken)
+	opendotaService := services.NewOpendotaService()
 	valveService := services.NewValveService()
 	mantaService := services.NewMantaService()
 
-	glyphController := controllers.NewGlyphController(glyphService, stratzService, valveService, mantaService)
+	glyphController := controllers.NewGlyphController(glyphService, opendotaService, valveService, mantaService)
 
 	glyphRouter := routers.NewGlyphRouter(glyphController)
 

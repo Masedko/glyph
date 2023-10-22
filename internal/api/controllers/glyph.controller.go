@@ -17,6 +17,10 @@ type StratzService interface {
 	GetMatchFromStratzAPI(matchID int) (dtos.Match, error)
 }
 
+type OpendotaService interface {
+	GetMatchFromOpendotaAPI(matchID int) (dtos.Match, error)
+}
+
 type ValveService interface {
 	RetrieveFile(match dtos.Match) error
 }
@@ -26,18 +30,18 @@ type MantaService interface {
 }
 
 type GlyphController struct {
-	GlyphService  GlyphService
-	StratzService StratzService
-	ValveService  ValveService
-	MantaService  MantaService
+	GlyphService    GlyphService
+	OpendotaService OpendotaService
+	ValveService    ValveService
+	MantaService    MantaService
 }
 
-func NewGlyphController(glyphService GlyphService, stratzService StratzService, valveService ValveService, mantaService MantaService) *GlyphController {
+func NewGlyphController(glyphService GlyphService, opendotaService OpendotaService, valveService ValveService, mantaService MantaService) *GlyphController {
 	return &GlyphController{
-		GlyphService:  glyphService,
-		StratzService: stratzService,
-		ValveService:  valveService,
-		MantaService:  mantaService,
+		GlyphService:    glyphService,
+		OpendotaService: opendotaService,
+		ValveService:    valveService,
+		MantaService:    mantaService,
 	}
 }
 
@@ -71,7 +75,7 @@ func (cr *GlyphController) GetGlyphs(c *fiber.Ctx) error {
 	}
 	// If not in db
 	// Make request to STRATZ API
-	match, err := cr.StratzService.GetMatchFromStratzAPI(matchID)
+	match, err := cr.OpendotaService.GetMatchFromOpendotaAPI(matchID)
 	if err != nil {
 		return err
 	}

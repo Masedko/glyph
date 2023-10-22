@@ -6,6 +6,8 @@ import (
 	"go-glyph-v2/internal/core/dtos"
 )
 
+// TEMPORARY USE OPENDOTA API
+
 type StratzService struct {
 	bearerToken string
 	client      *graphql.Client
