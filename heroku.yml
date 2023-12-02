@@ -1,0 +1,6 @@
+build:
+  languages:
+    go: go1.21.4
+  go:
+    ldflags:
+      - -X google.golang.org/protobuf/reflect/protoregistry.conflictPolicy=warn
