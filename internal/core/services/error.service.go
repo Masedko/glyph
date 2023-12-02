@@ -137,3 +137,9 @@ type CloseFileError struct {
 func (e CloseFileError) Error() string {
 	return fmt.Sprintf("Cannot close file %s: %s", e.filename, e.error)
 }
+
+type APIError struct{}
+
+func (e APIError) Error() string {
+	return "API error"
+}

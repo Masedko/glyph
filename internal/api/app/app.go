@@ -12,7 +12,6 @@ import (
 	"go-glyph-v2/internal/data/database"
 	"go-glyph-v2/internal/data/repository"
 	"log"
-	"os"
 )
 
 // @title			Glyph Dota 2 REST API
@@ -28,11 +27,14 @@ func Run(c *configuration.EnvConfigModel) {
 
 	glyphService := services.NewGlyphService(glyphRepository)
 	// stratzService := services.NewStratzService(c.STRATZToken)
-	opendotaService := services.NewOpendotaService()
+	// opendotaService := services.NewOpendotaService()
+	goSteamService := services.NewGoSteamService(c.SteamLoginUsername, c.SteamLoginPassword, c.SteamTwoFactorCode)
 	valveService := services.NewValveService()
 	mantaService := services.NewMantaService()
 
-	glyphController := controllers.NewGlyphController(glyphService, opendotaService, valveService, mantaService)
+	glyphController := controllers.NewGlyphController(glyphService, goSteamService,
+		// opendotaService, stratzService,
+		valveService, mantaService)
 
 	glyphRouter := routers.NewGlyphRouter(glyphController)
 
@@ -43,13 +45,13 @@ func Run(c *configuration.EnvConfigModel) {
 
 	//	CORS middleware
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "https://s3rbug.github.io",
+		AllowOrigins: "*",
 		AllowHeaders: "POST",
 	}))
 
 	routers.SetupRoutes(app, glyphRouter)
 
-	port := os.Getenv("PORT")
+	port := c.Port
 	if port == "" {
 		port = "8000"
 	}

@@ -43,6 +43,9 @@ func (s StratzService) GetMatchFromStratzAPI(matchID int) (dtos.Match, error) {
 	if err := s.client.Run(ctx, query, &respData); err != nil {
 		return dtos.Match{}, err
 	}
+	if respData.Match.ClusterID == 0 || respData.Match.ReplaySalt == 0 {
+		return dtos.Match{}, APIError{}
+	}
 	return dtos.Match{
 		ID:         matchID,
 		Cluster:    respData.Match.ClusterID,

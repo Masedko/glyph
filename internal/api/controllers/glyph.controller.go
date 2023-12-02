@@ -13,13 +13,18 @@ type GlyphService interface {
 	CreateGlyphs(createGlyphs *dtos.CreateGlyphs) error
 }
 
-type StratzService interface {
-	GetMatchFromStratzAPI(matchID int) (dtos.Match, error)
+type GoSteamService interface {
+	GetMatchFromGoSteamService(matchID int) (dtos.Match, error)
 }
 
-type OpendotaService interface {
-	GetMatchFromOpendotaAPI(matchID int) (dtos.Match, error)
-}
+//
+// type StratzService interface {
+// 	GetMatchFromStratzAPI(matchID int) (dtos.Match, error)
+// }
+//
+// type OpendotaService interface {
+// 	GetMatchFromOpendotaAPI(matchID int) (dtos.Match, error)
+// }
 
 type ValveService interface {
 	RetrieveFile(match dtos.Match) error
@@ -30,18 +35,24 @@ type MantaService interface {
 }
 
 type GlyphController struct {
-	GlyphService    GlyphService
-	OpendotaService OpendotaService
-	ValveService    ValveService
-	MantaService    MantaService
+	GlyphService   GlyphService
+	GoSteamService GoSteamService
+	// OpendotaService OpendotaService
+	// StratzService   StratzService
+	ValveService ValveService
+	MantaService MantaService
 }
 
-func NewGlyphController(glyphService GlyphService, opendotaService OpendotaService, valveService ValveService, mantaService MantaService) *GlyphController {
+func NewGlyphController(glyphService GlyphService, goSteamService GoSteamService,
+	// opendotaService OpendotaService, stratzService StratzService,
+	valveService ValveService, mantaService MantaService) *GlyphController {
 	return &GlyphController{
-		GlyphService:    glyphService,
-		OpendotaService: opendotaService,
-		ValveService:    valveService,
-		MantaService:    mantaService,
+		GlyphService:   glyphService,
+		GoSteamService: goSteamService,
+		// OpendotaService: opendotaService,
+		// StratzService:   stratzService,
+		ValveService: valveService,
+		MantaService: mantaService,
 	}
 }
 
@@ -73,9 +84,20 @@ func (cr *GlyphController) GetGlyphs(c *fiber.Ctx) error {
 	if glyphParse.GlyphParsed == true {
 		return c.Status(fiber.StatusOK).JSON(glyphParse.Glyphs)
 	}
-	// If not in db
-	// Make request to STRATZ API
-	match, err := cr.OpendotaService.GetMatchFromOpendotaAPI(matchID)
+	// // If not in db
+	// // Make request to STRATZ API
+	// match, err := cr.StratzService.GetMatchFromStratzAPI(matchID)
+	// if err.Error() == "API error" {
+	// 	match, err = cr.OpendotaService.GetMatchFromOpendotaAPI(matchID)
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// }
+	match, err := cr.GoSteamService.GetMatchFromGoSteamService(matchID)
+	if err != nil {
+		return err
+	}
+
 	if err != nil {
 		return err
 	}
