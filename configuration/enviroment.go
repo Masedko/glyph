@@ -16,6 +16,7 @@ type EnvConfigModel struct {
 	STRATZToken        string `mapstructure:"STRATZ_TOKEN"`
 	SteamLoginUsername string `mapstructure:"STEAM_LOGIN_USERNAME"`
 	SteamLoginPassword string `mapstructure:"STEAM_LOGIN_PASSWORD"`
+	SteamAuthCode      string `mapstructure:"STEAM_AUTH_CODE"`
 	SteamTwoFactorCode string `mapstructure:"STEAM_TWO_FACTOR_CODE"`
 }
 
@@ -35,6 +36,7 @@ func LoadConfig(filePath string) (err error) {
 	EnvConfig.STRATZToken = os.Getenv("STRATZ_TOKEN")
 	EnvConfig.SteamLoginUsername = os.Getenv("STEAM_LOGIN_USERNAME")
 	EnvConfig.SteamLoginPassword = os.Getenv("STEAM_LOGIN_PASSWORD")
+	EnvConfig.SteamAuthCode = os.Getenv("STEAM_AUTH_CODE")
 	EnvConfig.SteamTwoFactorCode = os.Getenv("STEAM_TWO_FACTOR_CODE")
 
 	if viper.ReadInConfig() != nil {

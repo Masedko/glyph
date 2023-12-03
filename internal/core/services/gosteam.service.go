@@ -16,12 +16,12 @@ type GoSteamService struct {
 	dotaClient *dota2.Dota2
 }
 
-func NewGoSteamService(username, password, twoFactorCode string) *GoSteamService {
+func NewGoSteamService(username, password, twoFactorCode, authCode string) *GoSteamService {
 	steamLoginInfo := new(steam.LogOnDetails)
 	steamLoginInfo.Username = username
 	steamLoginInfo.Password = password
 	steamLoginInfo.TwoFactorCode = twoFactorCode
-
+	steamLoginInfo.AuthCode = authCode
 	sc := steam.NewClient()
 	err := steam.InitializeSteamDirectory()
 	if err != nil {
