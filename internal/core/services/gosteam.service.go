@@ -35,7 +35,6 @@ func NewGoSteamService(username, password, twoFactorCode, authCode string) *GoSt
 				sc.Auth.LogOn(steamLoginInfo)
 			case *steam.LoggedOnEvent:
 				log.Println("Logged on to Steam")
-				dc = dota2.New(sc, logrus.New())
 				dc.SetPlaying(true)
 				time.Sleep(5 * time.Second)
 				dc.SayHello()
