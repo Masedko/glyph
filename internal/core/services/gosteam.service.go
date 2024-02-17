@@ -9,61 +9,77 @@ import (
 	"github.com/sirupsen/logrus"
 	"go-glyph-v2/internal/core/dtos"
 	"log"
+	"math"
+	"strings"
+	"sync"
 	"time"
 )
 
 type GoSteamService struct {
-	dotaClient *dota2.Dota2
+	dotaClients []*dota2.Dota2
+	counter     uint
+	lock        sync.Mutex
 }
 
-func NewGoSteamService(username, password, twoFactorCode, authCode string) *GoSteamService {
-	steamLoginInfo := new(steam.LogOnDetails)
-	steamLoginInfo.Username = username
-	steamLoginInfo.Password = password
-	steamLoginInfo.TwoFactorCode = twoFactorCode
-	steamLoginInfo.AuthCode = authCode
-	sc := steam.NewClient()
-	err := steam.InitializeSteamDirectory()
-	if err != nil {
-		log.Fatal(err)
+func NewGoSteamService(usernames, passwords string) *GoSteamService {
+	var steamLoginInfos []*steam.LogOnDetails
+	u := strings.Split(usernames, " ")
+	p := strings.Split(passwords, " ")
+	for i := 0; i < len(u); i++ {
+		steamLoginInfos = append(steamLoginInfos, &steam.LogOnDetails{
+			Username: u[i],
+			Password: p[i],
+		})
 	}
-	dc := dota2.New(sc, logrus.New())
-	go func(dc *dota2.Dota2) {
-		for event := range sc.Events() {
-			switch e := event.(type) {
-			case *steam.ConnectedEvent:
-				sc.Auth.LogOn(steamLoginInfo)
-			case *steam.LoggedOnEvent:
-				log.Println("Logged on to Steam")
-				dc.SetPlaying(true)
-				time.Sleep(5 * time.Second)
-				dc.SayHello()
-			case *steam.LogOnFailedEvent:
-				log.Printf("LogOn failed. Reason: %v\n", e.Result)
-			case *events.GCConnectionStatusChanged:
-				log.Println("GCConnectionStatusChanged")
-				isReady := e.NewState == protocol.GCConnectionStatus_GCConnectionStatus_HAVE_SESSION
-				if !isReady {
-					log.Println("GCConnectionStatusChanged: Not ready")
-					dc.SayHello()
-				}
-			case steam.FatalErrorEvent:
-				log.Print(e)
-			case error:
-				log.Print(e)
-			}
-
+	var dcs []*dota2.Dota2
+	for _, steamLoginInfo := range steamLoginInfos {
+		sc := steam.NewClient()
+		err := steam.InitializeSteamDirectory()
+		if err != nil {
+			log.Fatal(err)
 		}
-	}(dc)
-	server := sc.Connect()
-	log.Printf("Steam sc connected %s\n", server.String())
+		dc := dota2.New(sc, logrus.New())
+		go func(dc *dota2.Dota2) {
+			for event := range sc.Events() {
+				switch e := event.(type) {
+				case *steam.ConnectedEvent:
+					sc.Auth.LogOn(steamLoginInfo)
+				case *steam.LoggedOnEvent:
+					log.Println("Logged on to Steam")
+					dc.SetPlaying(true)
+					time.Sleep(5 * time.Second)
+					dc.SayHello()
+				case *steam.LogOnFailedEvent:
+					log.Printf("LogOn failed. Reason: %v\n", e.Result)
+				case *events.GCConnectionStatusChanged:
+					log.Println("GCConnectionStatusChanged")
+					isReady := e.NewState == protocol.GCConnectionStatus_GCConnectionStatus_HAVE_SESSION
+					if !isReady {
+						log.Println("GCConnectionStatusChanged: Not ready")
+						dc.SayHello()
+					}
+				case steam.FatalErrorEvent:
+					log.Print(e)
+				case error:
+					log.Print(e)
+				}
+			}
+		}(dc)
+		server := sc.Connect()
+		log.Printf("Steam sc connected %s\n", server.String())
+		dcs = append(dcs, dc)
+	}
 
-	return &GoSteamService{dotaClient: dc}
+	return &GoSteamService{dotaClients: dcs}
 }
 
-func (s GoSteamService) GetMatchFromGoSteamService(matchID int) (dtos.Match, error) {
+func (s *GoSteamService) GetMatchFromGoSteamService(matchID int) (dtos.Match, error) {
 	ctx := context.Background()
-	matchDetails, err := s.dotaClient.RequestMatchDetails(ctx, uint64(matchID))
+	index := int(math.Mod(float64(s.counter), float64(len(s.dotaClients))))
+	s.lock.Lock()
+	s.counter++
+	s.lock.Unlock()
+	matchDetails, err := s.dotaClients[index].RequestMatchDetails(ctx, uint64(matchID))
 	if err != nil {
 		return dtos.Match{}, err
 	}

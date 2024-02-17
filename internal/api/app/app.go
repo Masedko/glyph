@@ -28,7 +28,7 @@ func Run(c *configuration.EnvConfigModel) {
 	glyphService := services.NewGlyphService(glyphRepository)
 	// stratzService := services.NewStratzService(c.STRATZToken)
 	// opendotaService := services.NewOpendotaService()
-	goSteamService := services.NewGoSteamService(c.SteamLoginUsername, c.SteamLoginPassword, c.SteamTwoFactorCode, c.SteamAuthCode)
+	goSteamService := services.NewGoSteamService(c.SteamLoginUsernames, c.SteamLoginPasswords)
 	valveService := services.NewValveService()
 	mantaService := services.NewMantaService()
 
