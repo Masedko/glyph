@@ -21,10 +21,6 @@ type EnvConfigModel struct {
 var EnvConfig EnvConfigModel
 
 func LoadConfig(filePath string) (err error) {
-	if err = viper.BindEnv("POSTGRES_HOST", "POSTGRES_USER", "POSTGRES_PASSWORD", "POSTGRES_DB", "POSTGRES_PORT",
-		"SSL_MODE", "PORT", "STRATZ_TOKEN", "STEAM_LOGIN_USERNAMES", "STEAM_LOGIN_PASSWORDS"); err != nil {
-		return err
-	}
 	// Check if the file exists
 	if _, err = os.Stat(filePath); err == nil {
 		viper.SetConfigFile(filePath)
