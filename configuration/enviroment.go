@@ -2,6 +2,7 @@ package configuration
 
 import (
 	"github.com/spf13/viper"
+	"os"
 )
 
 type EnvConfigModel struct {
@@ -24,10 +25,17 @@ func LoadConfig(filePath string) (err error) {
 		"SSL_MODE", "PORT", "STRATZ_TOKEN", "STEAM_LOGIN_USERNAMES", "STEAM_LOGIN_PASSWORDS"); err != nil {
 		return err
 	}
-	viper.AutomaticEnv()
+	// Check if the file exists
+	if _, err = os.Stat(filePath); err == nil {
+		viper.SetConfigFile(filePath)
 
-	if err = viper.ReadInConfig(); err != nil {
-		return err
+		// Attempt to read the configuration file
+		if err = viper.ReadInConfig(); err != nil {
+			return err // File exists but could not be read
+		}
+	} else {
+		// File does not exist, load configuration from environment variables
+		viper.AutomaticEnv()
 	}
 
 	if err = viper.Unmarshal(&EnvConfig); err != nil {
