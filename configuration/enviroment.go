@@ -33,10 +33,8 @@ func LoadConfig(filePath string) (err error) {
 		if err = viper.ReadInConfig(); err != nil {
 			return err // File exists but could not be read
 		}
-	} else {
-		// File does not exist, load configuration from environment variables
-		viper.AutomaticEnv()
 	}
+	viper.AutomaticEnv()
 
 	if err = viper.Unmarshal(&EnvConfig); err != nil {
 		return err
