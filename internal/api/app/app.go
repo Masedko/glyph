@@ -18,7 +18,6 @@ import (
 // @version		1.0
 // @description	API for Glyph Dota 2 application
 // @host			go-glyph-v2-f53b68856ba5.herokuapp.com
-// @BasePath		/api
 func Run(c *configuration.EnvConfigModel) {
 
 	db := database.ConnectDB(c)
