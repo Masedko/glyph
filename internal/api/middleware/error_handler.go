@@ -41,7 +41,7 @@ func ErrorHandler(c *fiber.Ctx, err error) error {
 		code = fiber.StatusInternalServerError
 		message = e.Error()
 	case services.HTTPError:
-		code = fiber.StatusInternalServerError
+		code = fiber.StatusNotFound
 		message = e.Error()
 	case services.ParserCreationError:
 		code = fiber.StatusInternalServerError
