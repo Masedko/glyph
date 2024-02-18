@@ -31,9 +31,7 @@ func Run(c *configuration.EnvConfigModel) {
 	valveService := services.NewValveService()
 	mantaService := services.NewMantaService()
 
-	glyphController := controllers.NewGlyphController(glyphService, goSteamService,
-		// opendotaService, stratzService,
-		valveService, mantaService)
+	glyphController := controllers.NewGlyphController(glyphService, goSteamService, valveService, mantaService)
 
 	glyphRouter := routers.NewGlyphRouter(glyphController)
 

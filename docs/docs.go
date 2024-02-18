@@ -110,7 +110,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "go-glyph-v2-f53b68856ba5.herokuapp.com",
-	BasePath:         "/api",
+	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Glyph Dota 2 REST API",
 	Description:      "API for Glyph Dota 2 application",

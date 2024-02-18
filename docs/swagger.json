@@ -7,7 +7,6 @@
         "version": "1.0"
     },
     "host": "go-glyph-v2-f53b68856ba5.herokuapp.com",
-    "basePath": "/api",
     "paths": {
         "/api/glyph/{matchID}": {
             "post": {
