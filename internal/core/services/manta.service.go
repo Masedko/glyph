@@ -39,22 +39,23 @@ func (s MantaService) GetGlyphsFromDem(match dtos.Match) ([]models.Glyph, error)
 	}(f)
 	// Create stream parser
 	p, err := manta.NewStreamParser(f)
-	defer p.Stop()
 	if err != nil {
 		return nil, ParserCreationError{err}
 	}
+	defer p.Stop()
 	// Declare some variables for parsing
-	var gameCurrentTime, gameStartTime float64
-	// Three variables to get current time
-	var gamePaused bool
-	var pauseStartTick int32
-	var totalPausedTicks int32
+	var (
+		gameCurrentTime, gameStartTime float64
+		gamePaused                     bool
+		pauseStartTick                 int32
+		totalPausedTicks               int32
 
-	var glyphs []models.Glyph
-	var glyph models.Glyph
-	heroPlayers := make([]dtos.HeroPlayer, 10)
+		heroPlayers = make([]dtos.HeroPlayer, 10)
+		glyphs      []models.Glyph
+		glyph       models.Glyph
 
-	magicTime := 1100.0 // Time when heroes loaded TODO
+		magicTime = 1100.0 // Time when heroes loaded TODO
+	)
 
 	p.Callbacks.OnCDOTAUserMsg_SpectatorPlayerUnitOrders(func(m *dota.CDOTAUserMsg_SpectatorPlayerUnitOrders) error {
 		if m.GetOrderType() == int32(dota.DotaunitorderT_DOTA_UNIT_ORDER_GLYPH) {
@@ -62,7 +63,7 @@ func (s MantaService) GetGlyphsFromDem(match dtos.Match) ([]models.Glyph, error)
 			glyph = models.Glyph{
 				MatchID:     match.ID,
 				Username:    entity.Get("m_iszPlayerName").(string),
-				UserSteamID: fmt.Sprint(entity.Get("m_steamID").(uint64)),
+				UserSteamID: strconv.FormatInt(int64(entity.Get("m_steamID").(uint64)), 10),
 				Minute:      uint32(gameCurrentTime-gameStartTime) / 60,
 				Second:      uint32(math.Round(gameCurrentTime-gameStartTime)) % 60,
 				Team:        entity.Get("m_iTeamNum").(uint64),
@@ -74,10 +75,8 @@ func (s MantaService) GetGlyphsFromDem(match dtos.Match) ([]models.Glyph, error)
 		return nil
 	})
 	p.OnEntity(func(e *manta.Entity, op manta.EntityOp) error {
-		if e.GetClassName() != "CDOTAGamerulesProxy" && e.GetClassName() != "CDOTA_PlayerResource" {
-			return nil
-		}
-		if e.GetClassName() == "CDOTAGamerulesProxy" {
+		switch e.GetClassName() {
+		case "CDOTAGamerulesProxy":
 			gameStartTime = float64(e.Get("m_pGameRules.m_flGameStartTime").(float32))
 			gamePaused = e.Get("m_pGameRules.m_bGamePaused").(bool)
 			pauseStartTick = e.Get("m_pGameRules.m_nPauseStartTick").(int32)
@@ -87,26 +86,26 @@ func (s MantaService) GetGlyphsFromDem(match dtos.Match) ([]models.Glyph, error)
 			} else {
 				gameCurrentTime = float64((int32(p.NetTick) - totalPausedTicks) / 30)
 			}
-			return nil
-		}
-		if gameCurrentTime < magicTime && e.GetClassName() == "CDOTA_PlayerResource" {
-			for i := 0; i < 10; i++ {
-				heroPlayers[i].HeroID, _ = e.GetInt32("m_vecPlayerTeamData.000" + strconv.Itoa(i) + ".m_nSelectedHeroID")
-				heroPlayers[i].PlayerID, _ = e.GetUint64("m_vecPlayerData.000" + strconv.Itoa(i) + ".m_iPlayerSteamID")
+		case "CDOTA_PlayerResource":
+			if gameCurrentTime < magicTime {
+				for i := 0; i < 10; i++ {
+					heroPlayers[i].HeroID, _ = e.GetInt32("m_vecPlayerTeamData.000" + strconv.Itoa(i) + ".m_nSelectedHeroID")
+					heroPlayers[i].PlayerID, _ = e.GetUint64("m_vecPlayerData.000" + strconv.Itoa(i) + ".m_iPlayerSteamID")
+				}
 			}
-			return nil
 		}
 		return nil
 	})
 
-	err = p.Start()
-	if err != nil {
+	if err = p.Start(); err != nil {
 		return nil, ParserError{err}
 	}
+
 	for k := range glyphs {
 		for l := range heroPlayers {
-			if fmt.Sprint(glyphs[k].UserSteamID) == fmt.Sprint(heroPlayers[l].PlayerID) {
+			if glyphs[k].UserSteamID == strconv.FormatInt(int64(heroPlayers[l].PlayerID), 10) {
 				glyphs[k].HeroID = heroPlayers[l].HeroID
+				break
 			}
 		}
 	}
