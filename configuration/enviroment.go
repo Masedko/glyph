@@ -22,15 +22,15 @@ var EnvConfig EnvConfigModel
 func LoadConfig(filePath string) (err error) {
 	viper.SetConfigType("env")
 	viper.SetConfigFile(filePath)
-
+	viper.SetEnvPrefix("")
 	if err = viper.BindEnv("POSTGRES_HOST", "POSTGRES_USER", "POSTGRES_PASSWORD", "POSTGRES_DB", "POSTGRES_PORT",
 		"SSL_MODE", "PORT", "STRATZ_TOKEN", "STEAM_LOGIN_USERNAMES", "STEAM_LOGIN_PASSWORDS"); err != nil {
 		return err
 	}
 	viper.AutomaticEnv()
 
-	if viper.ReadInConfig() != nil {
-		return
+	if err = viper.ReadInConfig(); err != nil {
+		return err
 	}
 
 	if err = viper.Unmarshal(&EnvConfig); err != nil {
