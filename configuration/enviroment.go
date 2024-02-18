@@ -2,7 +2,6 @@ package configuration
 
 import (
 	"github.com/spf13/viper"
-	"os"
 )
 
 type EnvConfigModel struct {
@@ -23,16 +22,12 @@ var EnvConfig EnvConfigModel
 func LoadConfig(filePath string) (err error) {
 	viper.SetConfigType("env")
 	viper.SetConfigFile(filePath)
-	EnvConfig.DBHost = os.Getenv("POSTGRES_HOST")
-	EnvConfig.DBUserName = os.Getenv("POSTGRES_USER")
-	EnvConfig.DBUserPassword = os.Getenv("POSTGRES_PASSWORD")
-	EnvConfig.DBName = os.Getenv("POSTGRES_DB")
-	EnvConfig.DBPort = os.Getenv("POSTGRES_PORT")
-	EnvConfig.SSLMode = os.Getenv("SSL_MODE")
-	EnvConfig.Port = os.Getenv("PORT")
-	EnvConfig.STRATZToken = os.Getenv("STRATZ_TOKEN")
-	EnvConfig.SteamLoginUsernames = os.Getenv("STEAM_LOGIN_USERNAMES")
-	EnvConfig.SteamLoginPasswords = os.Getenv("STEAM_LOGIN_PASSWORDS")
+
+	if err = viper.BindEnv("POSTGRES_HOST", "POSTGRES_USER", "POSTGRES_PASSWORD", "POSTGRES_DB", "POSTGRES_PORT",
+		"SSL_MODE", "PORT", "STRATZ_TOKEN", "STEAM_LOGIN_USERNAMES", "STEAM_LOGIN_PASSWORDS"); err != nil {
+		return err
+	}
+	viper.AutomaticEnv()
 
 	if viper.ReadInConfig() != nil {
 		return
