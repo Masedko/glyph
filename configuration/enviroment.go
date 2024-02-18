@@ -1,8 +1,8 @@
 package configuration
 
 import (
-	"fmt"
 	"github.com/spf13/viper"
+	"os"
 )
 
 type EnvConfigModel struct {
@@ -23,7 +23,16 @@ var EnvConfig EnvConfigModel
 func LoadConfig(filePath string) (err error) {
 	viper.SetConfigType("env")
 	viper.SetConfigFile(filePath)
-	viper.AutomaticEnv()
+	EnvConfig.DBHost = os.Getenv("POSTGRES_HOST")
+	EnvConfig.DBUserName = os.Getenv("POSTGRES_USER")
+	EnvConfig.DBUserPassword = os.Getenv("POSTGRES_PASSWORD")
+	EnvConfig.DBName = os.Getenv("POSTGRES_DB")
+	EnvConfig.DBPort = os.Getenv("POSTGRES_PORT")
+	EnvConfig.SSLMode = os.Getenv("SSL_MODE")
+	EnvConfig.Port = os.Getenv("PORT")
+	EnvConfig.STRATZToken = os.Getenv("STRATZ_TOKEN")
+	EnvConfig.SteamLoginUsernames = os.Getenv("STEAM_LOGIN_USERNAMES")
+	EnvConfig.SteamLoginPasswords = os.Getenv("STEAM_LOGIN_PASSWORDS")
 
 	if viper.ReadInConfig() != nil {
 		return
@@ -32,7 +41,5 @@ func LoadConfig(filePath string) (err error) {
 	if err = viper.Unmarshal(&EnvConfig); err != nil {
 		return err
 	}
-	test := EnvConfig
-	fmt.Println(test)
 	return nil
 }
