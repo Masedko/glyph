@@ -97,10 +97,6 @@ func (cr *GlyphController) GetGlyphs(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-
-	if err != nil {
-		return err
-	}
 	// Download from valve cluster
 	err = cr.ValveService.RetrieveFile(match)
 	if err != nil {
