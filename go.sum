@@ -223,8 +223,8 @@ github.com/mattn/go-runewidth v0.0.14/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh
 github.com/mitchellh/mapstructure v1.5.0 h1:jeMsZIYE/09sWLaz43PL7Gy6RuMjD2eJVyuac5Z2hdY=
 github.com/mitchellh/mapstructure v1.5.0/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
-github.com/paralin/go-dota2 v0.0.0-20231030183240-0371bcf3d1fe h1:yLRx3dv+Nd2rTDe+fSqd4NJlXfF/o+93jHOogU1GlbE=
-github.com/paralin/go-dota2 v0.0.0-20231030183240-0371bcf3d1fe/go.mod h1:/NTZwB+zEfruzFua+/PSsNqzZSHDccOb+1MLaLh8WtQ=
+github.com/paralin/go-dota2 v0.0.0-20240409231310-e8f172852608 h1:R/AyUL+DSAdfYkye2qFcoGKbSFEOxE5p5PL/yCbRTmk=
+github.com/paralin/go-dota2 v0.0.0-20240409231310-e8f172852608/go.mod h1:tQ9Mv6sL56/NALyc/nZKy6NFIMKs/3+swkReIit5J7Q=
 github.com/paralin/go-steam v0.0.0-20231025185642-e7c8d97e052a h1:nudTZVJ/2Ew319CAPa0vC12nD4HD2UBTFbUINUa61r4=
 github.com/paralin/go-steam v0.0.0-20231025185642-e7c8d97e052a/go.mod h1:Ls8fi7iC7icw2va7bXNGGgrbs2DGAbK5nnlDGZwjr/U=
 github.com/pelletier/go-toml/v2 v2.0.6 h1:nrzqCb7j9cDFj2coyLNLaZuJTLjWjlaz6nvTvIwycIU=

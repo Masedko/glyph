@@ -10,7 +10,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.42.0
 	github.com/gofiber/swagger v0.1.9
 	github.com/machinebox/graphql v0.2.2
-	github.com/paralin/go-dota2 v0.0.0-20231030183240-0371bcf3d1fe
+	github.com/paralin/go-dota2 v0.0.0-20240409231310-e8f172852608
 	github.com/paralin/go-steam v0.0.0-20231025185642-e7c8d97e052a
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.15.0
