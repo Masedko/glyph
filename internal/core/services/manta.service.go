@@ -2,14 +2,16 @@ package services
 
 import (
 	"fmt"
-	"github.com/dotabuff/manta"
-	"github.com/dotabuff/manta/dota"
-	"go-glyph-v2/internal/core/dtos"
-	"go-glyph-v2/internal/core/models"
-	"golang.org/x/exp/slices"
 	"math"
 	"os"
 	"strconv"
+
+	"github.com/dotabuff/manta"
+	"github.com/dotabuff/manta/dota"
+	"golang.org/x/exp/slices"
+
+	"go-glyph-v2/internal/core/dtos"
+	"go-glyph-v2/internal/core/models"
 )
 
 type MantaService struct {
@@ -54,7 +56,7 @@ func (s MantaService) GetGlyphsFromDem(match dtos.Match) ([]models.Glyph, error)
 		glyphs      []models.Glyph
 		glyph       models.Glyph
 
-		magicTime = 1100.0 // Time when heroes loaded TODO
+		magicTime = 1600.0 // Time when heroes loaded TODO
 	)
 
 	p.Callbacks.OnCDOTAUserMsg_SpectatorPlayerUnitOrders(func(m *dota.CDOTAUserMsg_SpectatorPlayerUnitOrders) error {
